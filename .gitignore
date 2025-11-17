@@ -1,0 +1,7 @@
+venv/
+__pycache__/
+*.wav
+*.mp3
+*.npy
+*.h5
+*.pt
