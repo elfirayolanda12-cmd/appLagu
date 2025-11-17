@@ -1,0 +1,207 @@
+<!-- @format -->
+
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🎤 Hasil Analisis Indonesia Raya</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <header>
+      <h1>🎵 Hasil Analisis Nyanyianmu 🎵</h1>
+      <p>Lagu Kebangsaan Indonesia Raya</p>
+    </header>
+
+    <div class="container">
+      <!-- Score Section -->
+      <div class="result-box">
+        <h2>⭐ Nilai Kamu</h2>
+        <div class="score">{{ similarity_score }} / 100</div>
+        <div class="comment">💬 {{ comment }}</div>
+      </div>
+
+      <!-- Audio Analysis -->
+      <h2 style="margin-top: 50px">📊 Analisis Fitur Suara</h2>
+      <table>
+        <tr>
+          <th>Parameter</th>
+          <th>Nilai</th>
+        </tr>
+        <tr>
+          <td><strong>Durasi</strong></td>
+          <td>{{ analysis.duration }} detik</td>
+        </tr>
+        <tr>
+          <td><strong>Tempo</strong></td>
+          <td>{{ analysis.tempo }}</td>
+        </tr>
+        <tr>
+          <td><strong>Intensitas</strong></td>
+          <td>{{ analysis.intensity }}</td>
+        </tr>
+        <tr>
+          <td><strong>Rata-rata Pitch</strong></td>
+          <td>{{ analysis.avg_pitch }} Hz</td>
+        </tr>
+        <tr>
+          <td><strong>Pitch Variasi</strong></td>
+          <td>{{ analysis.pitch_std }}</td>
+        </tr>
+      </table>
+
+      <!-- Waveform & Pitch Chart -->
+      {% if waveform_img %}
+      <div class="chart-container">
+        <h3>📈 Waveform</h3>
+        <img src="data:image/png;base64,{{ waveform_img }}" alt="Waveform" />
+      </div>
+      {% endif %} {% if pitch_img %}
+      <div class="chart-container">
+        <h3>🎼 Pitch Kontur</h3>
+        <img src="data:image/png;base64,{{ pitch_img }}" alt="Pitch Contour" />
+      </div>
+      {% endif %}
+
+      <!-- Evaluation Per Line -->
+      <div class="evaluation-section">
+        <h2>🎤 Evaluasi Per Baris Lagu</h2>
+
+        {% if pitch_feedback and pitch_feedback|length > 0 %}
+        <table>
+          <thead>
+            <tr>
+              <th>Baris</th>
+              <th>Teks</th>
+              <th>Status</th>
+              <th>Similarity (%)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for line in pitch_feedback %}
+            <tr>
+              <td><strong>{{ line.line }}</strong></td>
+              <td>{{ line.text }}</td>
+              <td>{{ line.status }}</td>
+              <td><strong>{{ line.similarity }}%</strong></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <div
+          style="
+            background: #fff3cd;
+            color: #856404;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+          "
+        >
+          <p><strong>⚠️ Tidak ada data evaluasi per baris.</strong></p>
+          <p>
+            Kemungkinan audio terlalu pendek atau tidak terdeteksi dengan baik.
+          </p>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Leaderboard -->
+      <div class="leaderboard">
+        <h2>🏆 Leaderboard Teratas</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nama</th>
+              <th>Skor</th>
+              <th>Pitch</th>
+              <th>Tanggal</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in leaderboard %}
+            <tr>
+              <td>{{ loop.index }}</td>
+              <td>{{ row[0] }}</td>
+              <td><strong>{{ row[1] }}</strong></td>
+              <td>{{ row[3] }} Hz</td>
+              <td>{{ row[4] }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Action Buttons -->
+      <div style="text-align: center; margin-top: 50px">
+        <a href="/" class="btn">🔄 Coba Lagi</a>
+        <a
+          href="/leaderboard"
+          class="btn"
+          style="background: linear-gradient(135deg, #00b894, #00cec9)"
+          >🏆 Lihat Leaderboard</a
+        >
+      </div>
+    </div>
+
+    <footer>
+      <p>🇮🇩 Sistem Analisis Prosodi Lagu Indonesia Raya</p>
+      <p>&copy; 2025 - Penelitian Skripsi</p>
+    </footer>
+    <!-- Particles Background -->
+<div id="particles-js"></div>
+
+<!-- Floating Flags -->
+<div class="flag-float">🇮🇩</div>
+<div class="flag-float">🇮🇩</div>
+<div class="flag-float">🇮🇩</div>
+<div class="flag-float">🇮🇩</div>
+
+<!-- Particles.js Library -->
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+<script>
+  // Initialize Particles
+  particlesJS('particles-js', {
+    particles: {
+      number: { value: 80, density: { enable: true, value_area: 800 } },
+      color: { value: '#ffffff' },
+      shape: { type: 'circle' },
+      opacity: { value: 0.5, random: true },
+      size: { value: 3, random: true },
+      line_linked: {
+        enable: true,
+        distance: 150,
+        color: '#ffffff',
+        opacity: 0.4,
+        width: 1
+      },
+      move: {
+        enable: true,
+        speed: 2,
+        direction: 'none',
+        random: true,
+        out_mode: 'out'
+      }
+    },
+    interactivity: {
+      detect_on: 'canvas',
+      events: {
+        onhover: { enable: true, mode: 'repulse' },
+        onclick: { enable: true, mode: 'push' }
+      }
+    },
+    retina_detect: true
+  });
+</script>
+
+<!-- Your other scripts -->
+<script src="{{ url_for('static', filename='script_webaudio_enhanced.js') }}"></script>
+</body>
+
+  </body>
+</html>

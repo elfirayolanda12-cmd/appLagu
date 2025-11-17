@@ -1,0 +1,263 @@
+<!-- @format -->
+
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🎤 Analisis Indonesia Raya</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <style>
+      .control-buttons {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        margin-top: 25px;
+        flex-wrap: wrap;
+      }
+
+      .control-buttons button {
+        min-width: 150px;
+      }
+
+      .btn-pause {
+        background: linear-gradient(135deg, #f39c12, #e67e22);
+      }
+
+      .btn-resume {
+        background: linear-gradient(135deg, #27ae60, #2ecc71);
+      }
+
+      .btn-stop {
+        background: linear-gradient(135deg, #e74c3c, #c0392b);
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>🇮🇩 Analisis Prosodi Indonesia Raya 🇮🇩</h1>
+      <p>Sistem Pengenalan dan Evaluasi Lagu Kebangsaan</p>
+    </header>
+
+    <div class="nav-buttons">
+      <a href="/">🏠 Beranda</a>
+      <a href="/belajar">📚 Belajar</a>
+      <a href="/leaderboard">🏆 Leaderboard</a>
+    </div>
+
+    <div class="container">
+      <h2>🎵 Rekam Nyanyian Indonesia Raya</h2>
+      <p style="text-align: center; color: #7f8c8d; margin-bottom: 30px">
+        Nyanyikan lagu Indonesia Raya dengan sepenuh hati, sistem akan
+        menganalisis prosodi dan kualitas suara Anda!
+      </p>
+
+      <!-- Recording Section -->
+      <div class="recording-section" id="recordingSection">
+        <div id="status" style="font-size: 1.2rem; margin-bottom: 20px">
+          ⏸️ Siap. Klik tombol untuk mulai merekam
+        </div>
+
+        <!-- Control Buttons -->
+        <div class="control-buttons">
+          <button id="recordBtn" class="btn">🎙️ Mulai Rekam</button>
+          <button
+            id="pauseBtn"
+            class="btn btn-pause"
+            style="display: none"
+            disabled
+          >
+            ⏸️ Pause
+          </button>
+          <button
+            id="resumeBtn"
+            class="btn btn-resume"
+            style="display: none"
+            disabled
+          >
+            ▶️ Lanjut
+          </button>
+          <button
+            id="stopBtn"
+            class="btn btn-stop"
+            style="display: none"
+            disabled
+          >
+            ⏹️ Selesai
+          </button>
+        </div>
+
+        <!-- Timer Display -->
+        <div
+          id="timer"
+          style="
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-top: 25px;
+            color: #e74c3c;
+            display: none;
+          "
+        >
+          00:00
+        </div>
+
+        <!-- Lyrics Display -->
+        <div
+          id="lyricLine"
+          style="
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-top: 30px;
+            min-height: 60px;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #ffecd2, #fcb69f);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+          "
+        ></div>
+      </div>
+
+      <!-- Audio Backsound Element -->
+      <audio id="backsound" preload="auto" style="display: none">
+        <!-- TAMBAHKAN FILE AUDIO INDONESIA RAYA DI SINI -->
+        <!-- Letakkan file indonesia_raya.mp3 di folder static/ -->
+        <source
+          src="{{ url_for('static', filename='indonesia_raya.mp3') }}"
+          type="audio/mpeg"
+        />
+        <source
+          src="{{ url_for('static', filename='indonesia_raya.wav') }}"
+          type="audio/wav"
+        />
+        <!-- Jika belum punya file, bisa download dari YouTube atau sumber legal -->
+      </audio>
+
+      <!-- Info Section -->
+      <div
+        style="
+          background: #f8f9fa;
+          padding: 30px;
+          border-radius: 20px;
+          margin-top: 40px;
+        "
+      >
+        <h3 style="color: #cc0000; margin-bottom: 20px">
+          📝 Petunjuk Penggunaan:
+        </h3>
+        <ol style="line-height: 2.5; color: #2c3e50">
+          <li>🎤 Klik tombol <strong>"Mulai Rekam"</strong></li>
+          <li>✅ Izinkan akses mikrofon saat browser meminta</li>
+          <li>🎵 Backsound akan otomatis diputar, ikuti lirik yang muncul</li>
+          <li>
+            ⏸️ Gunakan tombol <strong>Pause</strong> jika perlu istirahat
+            sejenak
+          </li>
+          <li>▶️ Klik <strong>Lanjut</strong> untuk melanjutkan rekaman</li>
+          <li>
+            ⏹️ Klik <strong>Selesai</strong> atau biarkan backsound selesai
+            otomatis
+          </li>
+          <li>📊 Tunggu hasil analisis ditampilkan</li>
+        </ol>
+      </div>
+
+      <!-- Tips Section -->
+      <div
+        style="
+          background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+          color: #fff;
+          padding: 30px;
+          border-radius: 20px;
+          margin-top: 30px;
+        "
+      >
+        <h3 style="color: #fff; margin-bottom: 15px">
+          💡 Tips Mendapat Skor Tinggi:
+        </h3>
+        <ul style="line-height: 2.5; list-style: none; padding: 0">
+          <li>✨ Nyanyikan dengan nada yang tepat dan stabil</li>
+          <li>🎯 Artikulasi kata-kata dengan jelas</li>
+          <li>💪 Jaga volume suara tetap konsisten</li>
+          <li>❤️ Nyanyikan dengan penuh semangat patriotik!</li>
+          <li>🎧 Gunakan headphone untuk hasil terbaik</li>
+        </ul>
+      </div>
+
+      <!-- Warning if no backsound file -->
+      <div
+        id="noBacksoundWarning"
+        style="
+          display: none;
+          background: #fff3cd;
+          color: #856404;
+          padding: 20px;
+          border-radius: 15px;
+          margin-top: 20px;
+        "
+      >
+        <strong>⚠️ Catatan:</strong> File backsound Indonesia Raya belum
+        tersedia. Anda tetap bisa merekam, tapi tanpa panduan musik. Silakan
+        tambahkan file <code>indonesia_raya.mp3</code> ke folder
+        <code>static/</code>
+      </div>
+    </div>
+
+    <!-- Particles Background -->
+    <div id="particles-js"></div>
+
+    <!-- Floating Flags -->
+    <div class="flag-float">🇮🇩</div>
+    <div class="flag-float">🇮🇩</div>
+    <div class="flag-float">🇮🇩</div>
+    <div class="flag-float">🇮🇩</div>
+
+    <!-- Particles.js Library -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+      // Initialize Particles
+      particlesJS("particles-js", {
+        particles: {
+          number: { value: 80, density: { enable: true, value_area: 800 } },
+          color: { value: "#ffffff" },
+          shape: { type: "circle" },
+          opacity: { value: 0.5, random: true },
+          size: { value: 3, random: true },
+          line_linked: {
+            enable: true,
+            distance: 150,
+            color: "#ffffff",
+            opacity: 0.4,
+            width: 1,
+          },
+          move: {
+            enable: true,
+            speed: 2,
+            direction: "none",
+            random: true,
+            out_mode: "out",
+          },
+        },
+        interactivity: {
+          detect_on: "canvas",
+          events: {
+            onhover: { enable: true, mode: "repulse" },
+            onclick: { enable: true, mode: "push" },
+          },
+        },
+        retina_detect: true,
+      });
+    </script>
+
+    <!-- Your other scripts -->
+    <script src="{{ url_for('static', filename='script_webaudio_enhanced.js') }}"></script>
+  </body>
+
+  <footer>
+    <p>🇮🇩 Sistem Analisis Prosodi Lagu Indonesia Raya</p>
+    <p>&copy; 2025 - Penelitian Skripsi</p>
+  </footer>
+</html>
